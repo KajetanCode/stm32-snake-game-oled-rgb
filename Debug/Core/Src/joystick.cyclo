@@ -1,0 +1,2 @@
+../Core/Src/joystick.c:12:13:adc_select_channel	1
+../Core/Src/joystick.c:21:6:joystick_read	1

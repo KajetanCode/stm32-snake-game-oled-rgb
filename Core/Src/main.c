@@ -29,6 +29,7 @@
 #include <stdbool.h>
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
+#include "joystick.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,7 +39,15 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+joystick_t joy;
 
+volatile uint8_t sw_pressed = 0;
+
+uint8_t click_show_cnt = 0;
+
+uint32_t now;
+
+extern joystick_t joy;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -118,6 +127,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  uint32_t now = HAL_GetTick();
+	  joystick_read(&joy);
+	  DrawTest(&joy);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -175,7 +187,18 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void DrawTest(const joystick_t *joy)
+{
+    char buffer[32];
 
+    ssd1306_SetCursor(0,0);
+    snprintf(buffer, sizeof(buffer),
+             "X: %4u, Y: %4u",
+             joy->x,
+    			joy->y);
+    ssd1306_WriteString(buffer, Font_6x8, White);
+    ssd1306_UpdateScreen();
+}
 /* USER CODE END 4 */
 
 /**
