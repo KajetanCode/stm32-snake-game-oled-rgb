@@ -39,7 +39,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-joystick_t joy;
+joystick_raw_t joy;
 
 volatile uint8_t sw_pressed = 0;
 
@@ -47,7 +47,9 @@ uint8_t click_show_cnt = 0;
 
 uint32_t now;
 
-extern joystick_t joy;
+extern joystick_raw_t joy;
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -127,9 +129,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  joystick_raw_t joy_raw;
+	  joystick_norm_t joy_norm;
+	  joystick_axis_cal_t joy_x_cal, joy_y_cal;
+	  joy_x_cal.center = 2250;
+	  joy_x_cal.center = 2750;
+
+	  joystick_read_raw(&joy_raw);
+
+	  joy_raw.x = joystick_apply_deadzone(joy_raw.x, joy_x_cal.center);
+	  joy_raw.y = joystick_apply_deadzone(joy_raw.y, joy_y_cal.center);
+
+	  joystick_get_normalized(&joy_norm,
+	                           &joy_raw,
+	                           &joy_x_cal,
+	                           &joy_y_cal);
+
 	  uint32_t now = HAL_GetTick();
-	  joystick_read(&joy);
-	  DrawTest(&joy);
+
+	  DrawTest(&joy_raw, &joy_norm);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -187,16 +205,32 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void DrawTest(const joystick_t *joy)
+void DrawTest(const joystick_raw_t *joy_raw,
+				const joystick_raw_t *joy_norm,
+				const joystick_raw_t *joy_x_cal)
 {
     char buffer[32];
 
     ssd1306_SetCursor(0,0);
     snprintf(buffer, sizeof(buffer),
              "X: %4u, Y: %4u",
-             joy->x,
-    			joy->y);
+             joy_raw->x,
+    			joy_raw->y);
     ssd1306_WriteString(buffer, Font_6x8, White);
+
+    ssd1306_SetCursor(0,8);
+    snprintf(buffer, sizeof(buffer),
+             "X: %4u, Y: %4u",
+             joy_norm->x,
+    			joy_norm->y);
+    ssd1306_WriteString(buffer, Font_6x8, White);
+
+    ssd1306_SetCursor(0,16);
+    snprintf(buffer, sizeof(buffer),
+             "X: %4u",
+             joy_x_cal->x);
+    ssd1306_WriteString(buffer, Font_6x8, White);
+
     ssd1306_UpdateScreen();
 }
 /* USER CODE END 4 */

@@ -1,4 +1,4 @@
-../Core/Src/main.c:79:5:main	1
-../Core/Src/main.c:144:6:SystemClock_Config	4
-../Core/Src/main.c:190:6:DrawTest	1
-../Core/Src/main.c:208:6:Error_Handler	1
+../Core/Src/main.c:81:5:main	1
+../Core/Src/main.c:162:6:SystemClock_Config	4
+../Core/Src/main.c:208:6:DrawTest	1
+../Core/Src/main.c:242:6:Error_Handler	1

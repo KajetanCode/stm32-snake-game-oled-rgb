@@ -1,2 +1,5 @@
 ../Core/Src/joystick.c:12:13:adc_select_channel	1
-../Core/Src/joystick.c:21:6:joystick_read	1
+../Core/Src/joystick.c:21:6:joystick_read_raw	1
+../Core/Src/joystick.c:38:6:joystick_apply_deadzone	2
+../Core/Src/joystick.c:47:16:normalize_axis	2
+../Core/Src/joystick.c:58:6:joystick_get_normalized	1
