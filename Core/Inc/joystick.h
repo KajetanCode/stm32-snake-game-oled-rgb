@@ -27,7 +27,7 @@ typedef struct
 typedef struct
 {
     uint16_t axis_val;
-    uint16_t center_position;
+    uint16_t in_deadzone;
 } joystick_move;
 
 typedef enum

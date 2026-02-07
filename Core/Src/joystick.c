@@ -65,13 +65,13 @@ joy_event joystick_get_event(
 				uint16_t val_y,
 				uint16_t center_y)
 {
-    if (center_x && center_y)
-        return JOY_EVT_NONE;
+  //  if (center_x && center_y)
+  //      return JOY_EVT_NONE;
 
     if (val_x == 1 && !center_x && center_y)
         return JOY_EVT_LEFT;
 
-    if (val_x == 2 && !center_x && center_y)
+    if (val_x == 2 && (center_x==0) && (center_y==1))
         return JOY_EVT_RIGHT;
 
     if (val_y == 1 && !center_y)

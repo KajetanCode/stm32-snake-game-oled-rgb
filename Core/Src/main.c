@@ -47,6 +47,12 @@ uint8_t click_show_cnt = 0;
 
 uint32_t now;
 
+joystick_raw_t joy_raw;
+// joystick_norm_t joy_norm;
+joystick_center_t joy_center;
+joystick_axis_value axis_value_x;
+joystick_axis_value axis_value_y;
+
 //uint8_t dz_x, dz_y;
 //extern joystick_raw_t joy;
 
@@ -130,27 +136,33 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  joystick_raw_t joy_raw;
-	 // joystick_norm_t joy_norm;
-	  joystick_center_t joy_center;
-	  joystick_axis_value axis_value_x;
-	  joystick_axis_value axis_value_y;
+
 
 	  joy_center.x = 1971;
 	  joy_center.y = 3020;
 
 	  joystick_read_raw(&joy_raw);
 
-	  joy_raw.x = joystick_apply_deadzone(joy_raw.x, joy_center.x, &axis_value_x.axis_val, &axis_value_x.center_position);
-	  joy_raw.y = joystick_apply_deadzone(joy_raw.y, joy_center.y, &axis_value_y.axis_val, &axis_value_y.center_position);
+	  joystick_apply_deadzone(
+	      joy_raw.x, joy_center.x,
+	      &axis_value_x.axis_val,
+	      &axis_value_x.center_position);
 
+	  joystick_apply_deadzone(
+	      joy_raw.y, joy_center.y,
+	      &axis_value_y.axis_val,
+	      &axis_value_y.center_position);
 
-	  joy_event evt = joystick_get_event(&axis_value_x.axis_val, &axis_value_x.center_position, &axis_value_y.axis_val, &axis_value_y.center_position);
+	  joy_event evt = joystick_get_event(
+	      axis_value_x.axis_val,
+	      axis_value_x.center_position,
+	      axis_value_y.axis_val,
+	      axis_value_y.center_position);
 
 
 	  uint32_t now = HAL_GetTick();
 
-	  DrawTest(&joy_raw, &axis_value_x, &axis_value_y);
+	  DrawTest(&joy_raw, &axis_value_x, &axis_value_y, evt);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
