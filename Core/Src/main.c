@@ -39,7 +39,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-joystick_raw_t joy;
+//joystick_raw_t joy;
 
 volatile uint8_t sw_pressed = 0;
 
@@ -47,7 +47,8 @@ uint8_t click_show_cnt = 0;
 
 uint32_t now;
 
-extern joystick_raw_t joy;
+//uint8_t dz_x, dz_y;
+//extern joystick_raw_t joy;
 
 
 /* USER CODE END PD */
@@ -130,24 +131,23 @@ int main(void)
   while (1)
   {
 	  joystick_raw_t joy_raw;
-	  joystick_norm_t joy_norm;
-	  joystick_axis_cal_t joy_x_cal, joy_y_cal;
-	  joy_x_cal.center = 2250;
-	  joy_x_cal.center = 2750;
+	 // joystick_norm_t joy_norm;
+	  joystick_center_t joy_center;
+	  joystick_axis_value axis_value_x;
+	  joystick_axis_value axis_value_y;
+
+	  joy_center.x = 1971;
+	  joy_center.y = 3020;
 
 	  joystick_read_raw(&joy_raw);
 
-	  joy_raw.x = joystick_apply_deadzone(joy_raw.x, joy_x_cal.center);
-	  joy_raw.y = joystick_apply_deadzone(joy_raw.y, joy_y_cal.center);
+	  joy_raw.x = joystick_apply_deadzone(joy_raw.x, joy_center.x, &axis_value_x.axis_val, &axis_value_x.center_position);
+	  joy_raw.y = joystick_apply_deadzone(joy_raw.y, joy_center.y, &axis_value_y.axis_val, &axis_value_y.center_position);
 
-	  joystick_get_normalized(&joy_norm,
-	                           &joy_raw,
-	                           &joy_x_cal,
-	                           &joy_y_cal);
 
 	  uint32_t now = HAL_GetTick();
 
-	  DrawTest(&joy_raw, &joy_norm);
+	  DrawTest(&joy_raw, &axis_value_x, &axis_value_y);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -206,8 +206,8 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void DrawTest(const joystick_raw_t *joy_raw,
-				const joystick_raw_t *joy_norm,
-				const joystick_raw_t *joy_x_cal)
+              const joystick_axis_value *axis_value_x,
+              const joystick_axis_value *axis_value_y)
 {
     char buffer[32];
 
@@ -221,16 +221,9 @@ void DrawTest(const joystick_raw_t *joy_raw,
     ssd1306_SetCursor(0,8);
     snprintf(buffer, sizeof(buffer),
              "X: %4u, Y: %4u",
-             joy_norm->x,
-    			joy_norm->y);
+			 axis_value_x->axis_val,
+			 axis_value_y->axis_val);
     ssd1306_WriteString(buffer, Font_6x8, White);
-
-    ssd1306_SetCursor(0,16);
-    snprintf(buffer, sizeof(buffer),
-             "X: %4u",
-             joy_x_cal->x);
-    ssd1306_WriteString(buffer, Font_6x8, White);
-
     ssd1306_UpdateScreen();
 }
 /* USER CODE END 4 */

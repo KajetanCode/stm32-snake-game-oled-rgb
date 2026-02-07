@@ -10,13 +10,25 @@
 
 #include <stdint.h>
 
-#define JOY_DEADZONE 5
+#define JOY_DEADZONE 100
 
 typedef struct
 {
     uint16_t x;
     uint16_t y;
 } joystick_raw_t;
+
+typedef struct
+{
+    uint16_t axis_val;
+    uint16_t center_position;
+} joystick_axis_value;
+
+typedef struct
+{
+    uint16_t x;
+    uint16_t y;
+} joystick_center_t;
 
 typedef struct
 {
@@ -30,7 +42,7 @@ typedef struct
     uint16_t center;
     uint16_t max;
 } joystick_axis_cal_t;
-
+/*
 void joystick_read_raw(joystick_raw_t *joy);
 
 void joystick_read_raw(joystick_raw_t *raw);
@@ -43,5 +55,5 @@ void joystick_get_normalized(joystick_norm_t *out,
                               const joystick_raw_t *raw,
                               const joystick_axis_cal_t *x_cal,
                               const joystick_axis_cal_t *y_cal);
-
+*/
 #endif /* INC_JOYSTICK_H_ */
