@@ -1,3 +1,5 @@
 ../Core/Src/joystick.c:12:13:adc_select_channel	1
 ../Core/Src/joystick.c:21:6:joystick_read_raw	1
 ../Core/Src/joystick.c:38:6:joystick_apply_deadzone	4
+../Core/Src/joystick.c:62:11:joystick_get_event	13
+../Core/Src/joystick.c:87:13:joy_event_to_str	5

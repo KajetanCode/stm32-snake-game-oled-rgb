@@ -145,6 +145,9 @@ int main(void)
 	  joy_raw.y = joystick_apply_deadzone(joy_raw.y, joy_center.y, &axis_value_y.axis_val, &axis_value_y.center_position);
 
 
+	  joy_event evt = joystick_get_event(&axis_value_x.axis_val, &axis_value_x.center_position, &axis_value_y.axis_val, &axis_value_y.center_position);
+
+
 	  uint32_t now = HAL_GetTick();
 
 	  DrawTest(&joy_raw, &axis_value_x, &axis_value_y);
@@ -207,7 +210,8 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void DrawTest(const joystick_raw_t *joy_raw,
               const joystick_axis_value *axis_value_x,
-              const joystick_axis_value *axis_value_y)
+              const joystick_axis_value *axis_value_y,
+			  joy_event evt)
 {
     char buffer[32];
 
@@ -224,6 +228,13 @@ void DrawTest(const joystick_raw_t *joy_raw,
 			 axis_value_x->axis_val,
 			 axis_value_y->axis_val);
     ssd1306_WriteString(buffer, Font_6x8, White);
+
+    ssd1306_SetCursor(0,16);
+    ssd1306_WriteString(
+        joy_event_to_str(evt),
+        Font_6x8,
+        White);
+
     ssd1306_UpdateScreen();
 }
 /* USER CODE END 4 */

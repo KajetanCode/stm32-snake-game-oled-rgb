@@ -58,3 +58,41 @@ void joystick_apply_deadzone(
         *in_deadzone = 0;
     }
 }
+
+joy_event joystick_get_event(
+				uint16_t val_x,
+				uint16_t center_x,
+				uint16_t val_y,
+				uint16_t center_y)
+{
+    if (center_x && center_y)
+        return JOY_EVT_NONE;
+
+    if (val_x == 1 && !center_x && center_y)
+        return JOY_EVT_LEFT;
+
+    if (val_x == 2 && !center_x && center_y)
+        return JOY_EVT_RIGHT;
+
+    if (val_y == 1 && !center_y)
+        return JOY_EVT_UP;
+
+    if (val_y == 2 && !center_y)
+        return JOY_EVT_DOWN;
+
+    return JOY_EVT_NONE;
+}
+
+
+const char* joy_event_to_str(joy_event evt)
+{
+    switch (evt)
+    {
+        case JOY_EVT_LEFT:  return "LEFT";
+        case JOY_EVT_RIGHT: return "RIGHT";
+        case JOY_EVT_UP:    return "UP";
+        case JOY_EVT_DOWN:  return "DOWN";
+        default:            return "NONE";
+    }
+}
+
