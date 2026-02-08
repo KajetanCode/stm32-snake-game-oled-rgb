@@ -44,16 +44,18 @@
 //joystick_raw_t joy;
 
 volatile uint8_t sw_pressed = 0;
+static ui_state_t ui_state = UI_NONE;
 
 uint8_t click_show_cnt = 0;
 
 uint32_t now;
 
 joystick_raw_t joy_raw;
-// joystick_norm_t joy_norm;
 joystick_center_t joy_center;
 joystick_axis_value axis_value_x;
 joystick_axis_value axis_value_y;
+
+
 
 //uint8_t dz_x, dz_y;
 //extern joystick_raw_t joy;
@@ -161,18 +163,21 @@ int main(void)
 	      axis_value_y.axis_val,
 	      axis_value_y.center_position);
 
-	//  set_RGB(evt);
+	  ui_state = ui_handle_event(ui_state, evt);
 
-	  uint32_t now = HAL_GetTick();
+	  static uint32_t last_oled = 0;
 
-	 // DrawTest(&joy_raw, &axis_value_x, &axis_value_y, evt);
+	  if (HAL_GetTick() - last_oled >= 50)   // 20 FPS
+	  {
+		  last_oled = HAL_GetTick();
 
 	  oled_clear();
 	  oled_draw_raw(joy_raw.x, joy_raw.y);
 	  oled_draw_axis(axis_value_x.axis_val, axis_value_y.axis_val);
 	  oled_draw_event(evt);
-
-
+	  oled_draw_color_menu(ui_state);
+	  ssd1306_UpdateScreen();
+	  }
 
     /* USER CODE END WHILE */
 
@@ -231,38 +236,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-/*
-void DrawTest(const joystick_raw_t *joy_raw,
-              const joystick_axis_value *axis_value_x,
-              const joystick_axis_value *axis_value_y,
-			  joy_event evt)
-{
-    char buffer[32];
 
-    ssd1306_SetCursor(0,0);
-    snprintf(buffer, sizeof(buffer),
-             "X: %4u, Y: %4u",
-             joy_raw->x,
-    			joy_raw->y);
-    ssd1306_WriteString(buffer, Font_6x8, White);
-
-    ssd1306_SetCursor(0,8);
-    snprintf(buffer, sizeof(buffer),
-             "X: %4u, Y: %4u",
-			 axis_value_x->axis_val,
-			 axis_value_y->axis_val);
-    ssd1306_WriteString(buffer, Font_6x8, White);
-
-    ssd1306_SetCursor(0,16);
-    ssd1306_WriteString(
-        joy_event_to_str(evt),
-        Font_6x8,
-        White);
-
-    ssd1306_UpdateScreen();
-
-}
-*/
 /* USER CODE END 4 */
 
 /**

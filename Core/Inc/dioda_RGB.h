@@ -9,10 +9,6 @@ typedef enum
     RGB_RED,
     RGB_GREEN,
     RGB_BLUE,
-    RGB_YELLOW,
-    RGB_CYAN,
-    RGB_MAGENTA,
-    RGB_WHITE
 } rgb_color_t;
 
 void rgb_init(void);

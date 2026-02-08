@@ -2,7 +2,18 @@
 #define INC_OLED_H_
 
 #include <stdint.h>
-#include "joystick.h"   // joy_event, struktury joysticka
+#include "joystick.h"
+
+typedef enum
+{
+    UI_NONE = 0,
+    UI_RED,
+    UI_GREEN,
+    UI_BLUE,
+    UI_STATE_MAX
+} ui_state_t;
+
+
 
 void oled_init(void);
 void oled_clear(void);
