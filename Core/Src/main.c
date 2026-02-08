@@ -30,6 +30,8 @@
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
 #include "joystick.h"
+#include "dioda_RGB.h"
+#include "oled.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -159,10 +161,19 @@ int main(void)
 	      axis_value_y.axis_val,
 	      axis_value_y.center_position);
 
+	//  set_RGB(evt);
 
 	  uint32_t now = HAL_GetTick();
 
-	  DrawTest(&joy_raw, &axis_value_x, &axis_value_y, evt);
+	 // DrawTest(&joy_raw, &axis_value_x, &axis_value_y, evt);
+
+	  oled_clear();
+	  oled_draw_raw(joy_raw.x, joy_raw.y);
+	  oled_draw_axis(axis_value_x.axis_val, axis_value_y.axis_val);
+	  oled_draw_event(evt);
+
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -220,6 +231,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+/*
 void DrawTest(const joystick_raw_t *joy_raw,
               const joystick_axis_value *axis_value_x,
               const joystick_axis_value *axis_value_y,
@@ -248,7 +260,9 @@ void DrawTest(const joystick_raw_t *joy_raw,
         White);
 
     ssd1306_UpdateScreen();
+
 }
+*/
 /* USER CODE END 4 */
 
 /**
