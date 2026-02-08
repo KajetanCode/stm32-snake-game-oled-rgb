@@ -55,7 +55,8 @@ joystick_center_t joy_center;
 joystick_axis_value axis_value_x;
 joystick_axis_value axis_value_y;
 
-
+static joy_event last_evt = JOY_EVT_NONE;
+static uint32_t last_repeat = 0;
 
 //uint8_t dz_x, dz_y;
 //extern joystick_raw_t joy;
@@ -163,7 +164,8 @@ int main(void)
 	      axis_value_y.axis_val,
 	      axis_value_y.center_position);
 
-	  ui_state = ui_handle_event(ui_state, evt);
+	  now = HAL_GetTick();
+	  ui_state = ui_process_joystick(ui_state, evt, now);
 
 	  static uint32_t last_oled = 0;
 

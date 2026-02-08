@@ -5,3 +5,4 @@
 ../Core/Src/oled.c:40:6:oled_draw_event	1
 ../Core/Src/oled.c:51:12:ui_handle_event	4
 ../Core/Src/oled.c:71:6:oled_draw_color_menu	5
+../Core/Src/oled.c:110:12:ui_process_joystick	5

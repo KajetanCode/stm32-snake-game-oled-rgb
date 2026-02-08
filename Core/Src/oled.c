@@ -107,3 +107,33 @@ void oled_draw_color_menu(ui_state_t state)
    // ssd1306_UpdateScreen();
 }
 
+ui_state_t ui_process_joystick(
+    ui_state_t state,
+    joy_event evt,
+    uint32_t now)
+{
+    static joy_event last_evt = JOY_EVT_NONE;
+    static uint32_t last_repeat = 0;
+
+    /* --- triger --- */
+    if (evt != last_evt)
+    {
+        last_evt = evt;
+        last_repeat = now;
+
+        if (evt != JOY_EVT_NONE)
+        {
+            return ui_handle_event(state, evt);
+        }
+    }
+    /* --- auto-repeat --- */
+    else if (evt != JOY_EVT_NONE &&
+             (now - last_repeat) >= 300)
+    {
+        last_repeat = now;
+        return ui_handle_event(state, evt);
+    }
+
+    return state;
+}
+
