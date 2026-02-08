@@ -1,0 +1,2 @@
+../Core/Src/dioda_RGB.c:7:17:percent_to_pwm	2
+../Core/Src/dioda_RGB.c:15:6:rgb_apply_ui_color	1

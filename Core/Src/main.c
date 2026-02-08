@@ -32,6 +32,7 @@
 #include "joystick.h"
 #include "dioda_RGB.h"
 #include "oled.h"
+#include "ui.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +58,16 @@ joystick_axis_value axis_value_y;
 
 static joy_event last_evt = JOY_EVT_NONE;
 static uint32_t last_repeat = 0;
+
+ui_color_state_t ui_color =
+{
+    .selected = UI_RED,
+    .r = 0,
+    .g = 0,
+    .b = 0
+};
+
+
 
 //uint8_t dz_x, dz_y;
 //extern joystick_raw_t joy;
@@ -165,7 +176,14 @@ int main(void)
 	      axis_value_y.center_position);
 
 	  now = HAL_GetTick();
-	  ui_state = ui_process_joystick(ui_state, evt, now);
+
+
+	  ui_handle_navigation(&ui_color, evt, HAL_GetTick());
+	  ui_handle_value(&ui_color, evt);
+
+	  ui_process_joystick(&ui_color, evt, now);
+
+	  rgb_apply_ui_color(&ui_color);
 
 	  static uint32_t last_oled = 0;
 
@@ -177,7 +195,7 @@ int main(void)
 	  oled_draw_raw(joy_raw.x, joy_raw.y);
 	  oled_draw_axis(axis_value_x.axis_val, axis_value_y.axis_val);
 	  oled_draw_event(evt);
-	  oled_draw_color_menu(ui_state);
+	  oled_draw_color_menu(&ui_color);
 	  ssd1306_UpdateScreen();
 	  }
 

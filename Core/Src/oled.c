@@ -48,92 +48,59 @@ void oled_draw_event(joy_event evt)
    // ssd1306_UpdateScreen();
 }
 
-ui_state_t ui_handle_event(ui_state_t state, joy_event evt)
+
+
+
+void oled_draw_color_menu(const ui_color_state_t *ui)
 {
-    switch (evt)
-    {
-        case JOY_EVT_DOWN:
-            state = (state + 1) % UI_STATE_MAX;
-            break;
+    char buf[16];
 
-        case JOY_EVT_UP:
-            state = (state == 0) ? UI_STATE_MAX - 1 : state - 1;
-            break;
-
-        default:
-            break;
-    }
-
-    return state;
-}
-
-
-void oled_draw_color_menu(ui_state_t state)
-{
-    /* Stała lista */
+    /* --- R --- */
     ssd1306_SetCursor(0, 24);
     ssd1306_WriteString("R", Font_6x8, White);
 
+    ssd1306_SetCursor(100, 24);
+    snprintf(buf, sizeof(buf), "%3u%%", ui->r);
+    ssd1306_WriteString(buf, Font_6x8, White);
+
+    /* --- G --- */
     ssd1306_SetCursor(0, 32);
     ssd1306_WriteString("G", Font_6x8, White);
 
+    ssd1306_SetCursor(100, 32);
+    snprintf(buf, sizeof(buf), "%3u%%", ui->g);
+    ssd1306_WriteString(buf, Font_6x8, White);
+
+    /* --- B --- */
     ssd1306_SetCursor(0, 40);
     ssd1306_WriteString("B", Font_6x8, White);
 
+    ssd1306_SetCursor(100, 40);
+    snprintf(buf, sizeof(buf), "%3u%%", ui->b);
+    ssd1306_WriteString(buf, Font_6x8, White);
 
-
-    switch (state)
+    /* --- Aktywny kolor --- */
+    switch (ui->selected)
     {
         case UI_RED:
-        	ssd1306_SetCursor(48, 24);
+            ssd1306_SetCursor(48, 24);
             ssd1306_WriteString("RED", Font_6x8, White);
             break;
 
         case UI_GREEN:
-        	ssd1306_SetCursor(48, 32);
+            ssd1306_SetCursor(48, 32);
             ssd1306_WriteString("GREEN", Font_6x8, White);
             break;
 
         case UI_BLUE:
-        	ssd1306_SetCursor(48, 40);
+            ssd1306_SetCursor(48, 40);
             ssd1306_WriteString("BLUE", Font_6x8, White);
             break;
 
         default:
-            ssd1306_WriteString(" ", Font_6x8, White);
             break;
     }
-
-   // ssd1306_UpdateScreen();
 }
 
-ui_state_t ui_process_joystick(
-    ui_state_t state,
-    joy_event evt,
-    uint32_t now)
-{
-    static joy_event last_evt = JOY_EVT_NONE;
-    static uint32_t last_repeat = 0;
 
-    /* --- triger --- */
-    if (evt != last_evt)
-    {
-        last_evt = evt;
-        last_repeat = now;
-
-        if (evt != JOY_EVT_NONE)
-        {
-            return ui_handle_event(state, evt);
-        }
-    }
-    /* --- auto-repeat --- */
-    else if (evt != JOY_EVT_NONE &&
-             (now - last_repeat) >= 300)
-    {
-        last_repeat = now;
-        return ui_handle_event(state, evt);
-    }
-
-    return state;
-}
 

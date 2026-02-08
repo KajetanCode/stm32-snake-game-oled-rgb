@@ -3,16 +3,7 @@
 
 #include <stdint.h>
 #include "joystick.h"
-
-typedef enum
-{
-    UI_NONE = 0,
-    UI_RED,
-    UI_GREEN,
-    UI_BLUE,
-    UI_STATE_MAX
-} ui_state_t;
-
+#include "ui.h"
 
 
 void oled_init(void);
