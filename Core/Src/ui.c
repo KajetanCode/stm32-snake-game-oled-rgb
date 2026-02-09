@@ -6,7 +6,7 @@
  */
 #include <stdint.h>
 #include <ui.h>
-
+#include <stdbool.h>
 
 
 void ui_process_joystick(
@@ -16,20 +16,38 @@ void ui_process_joystick(
 {
     static joy_event last_evt = JOY_EVT_NONE;
     static uint32_t last_repeat = 0;
+    static uint32_t last_activity = 0;
 
+    bool horiz = (evt == JOY_EVT_RIGHT || evt == JOY_EVT_LEFT);
+    bool vert  = (evt == JOY_EVT_UP    || evt == JOY_EVT_DOWN);
+
+    /* --- idle --- */
+    if (evt == JOY_EVT_NONE)
+    {
+        if (last_activity && (now - last_activity) >= 3000)
+        {
+            ui->selected = UI_NONE;
+            last_activity = 0;
+        }
+        last_evt = evt;
+        return;
+    }
+
+    last_activity = now;
+
+    /* --- nowy kierunek --- */
     if (evt != last_evt)
     {
         last_evt = evt;
         last_repeat = now;
 
-        if (evt != JOY_EVT_NONE)
-        {
-        	ui_handle_navigation(ui, evt, now);
-            ui_handle_value(ui, evt);
-        }
+        ui_handle_navigation(ui, evt, now);
+        ui_handle_value(ui, evt);
+        return;
     }
-    else if (evt != JOY_EVT_NONE &&
-             (now - last_repeat) >= 300)
+
+    /* --- utrzymanie kierunku --- */
+    if (horiz || (vert && (now - last_repeat) >= 300))
     {
         last_repeat = now;
         ui_handle_navigation(ui, evt, now);
@@ -68,28 +86,6 @@ void ui_handle_navigation(
     joy_event evt,
     uint32_t now)
 {
-    static uint32_t last_nav = 0;        // rate-limit (300 ms)
-    static uint32_t last_activity = 0;   // idle timer (3 s)
-
-    /* --- brak ruchu: sprawdź idle --- */
-    if (evt != JOY_EVT_UP && evt != JOY_EVT_DOWN && evt == JOY_EVT_NONE)
-    {
-        if (last_activity != 0 && (now - last_activity) >= 3000)
-        {
-            ui->selected = UI_NONE;      // albo 0, jeśli UI_NONE == 0
-            last_activity = 0;           // zapobiega ciągłemu resetowi
-        }
-        return;
-    }
-
-    /* --- ruch: reset idle --- */
-    last_activity = now;
-
-    /* --- ograniczenie szybkości --- */
-    if (now - last_nav < 300)
-        return;
-
-    last_nav = now;
 
     switch (evt)
     {
