@@ -72,7 +72,7 @@ void ui_handle_navigation(
     static uint32_t last_activity = 0;   // idle timer (3 s)
 
     /* --- brak ruchu: sprawdź idle --- */
-    if (evt != JOY_EVT_UP && evt != JOY_EVT_DOWN)
+    if (evt != JOY_EVT_UP && evt != JOY_EVT_DOWN && evt == JOY_EVT_NONE)
     {
         if (last_activity != 0 && (now - last_activity) >= 3000)
         {

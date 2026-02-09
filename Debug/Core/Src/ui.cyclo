@@ -1,4 +1,4 @@
 ../Core/Src/ui.c:12:6:ui_process_joystick	5
 ../Core/Src/ui.c:41:6:ui_actual_color_state	15
-../Core/Src/ui.c:66:6:ui_handle_navigation	9
+../Core/Src/ui.c:66:6:ui_handle_navigation	10
 ../Core/Src/ui.c:112:6:ui_handle_value	15

@@ -52,7 +52,12 @@ uint8_t click_show_cnt = 0;
 uint32_t now;
 
 joystick_raw_t joy_raw;
-joystick_center_t joy_center;
+
+joystick_center_t joy_center = {
+    .x = 1971,
+    .y = 3020
+};
+
 joystick_axis_value axis_value_x;
 joystick_axis_value axis_value_y;
 
@@ -136,9 +141,9 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 
-  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 500);
-  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 500);
-  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 500);
+  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 000);
+  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 000);
+  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 000);
 
   ssd1306_Init();
   ssd1306_Fill(Black);
@@ -154,8 +159,6 @@ int main(void)
   {
 
 
-	  joy_center.x = 1971;
-	  joy_center.y = 3020;
 
 	  joystick_read_raw(&joy_raw);
 
@@ -178,8 +181,8 @@ int main(void)
 	  now = HAL_GetTick();
 
 
-	  ui_handle_navigation(&ui_color, evt, HAL_GetTick());
-	  ui_handle_value(&ui_color, evt);
+//	  ui_handle_navigation(&ui_color, evt, HAL_GetTick());
+//	  ui_handle_value(&ui_color, evt);
 
 	  ui_process_joystick(&ui_color, evt, now);
 
