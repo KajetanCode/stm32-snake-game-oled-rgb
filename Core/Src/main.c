@@ -44,7 +44,7 @@
 /* USER CODE BEGIN PD */
 //joystick_raw_t joy;
 
-volatile uint8_t sw_pressed = 0;
+volatile ui_menu_page current_menu_page;
 static ui_state_t ui_state = UI_NONE;
 
 uint8_t click_show_cnt = 0;
@@ -180,11 +180,7 @@ int main(void)
 
 	  now = HAL_GetTick();
 
-
-//	  ui_handle_navigation(&ui_color, evt, HAL_GetTick());
-//	  ui_handle_value(&ui_color, evt);
-
-	  ui_process_joystick(&ui_color, evt, now);
+	  ui_rgb_process_joystick(&ui_color, evt, now);
 
 	  rgb_apply_ui_color(&ui_color);
 
@@ -194,12 +190,17 @@ int main(void)
 	  {
 		  last_oled = HAL_GetTick();
 
+	  chose_screen(current_menu_page, evt);
+
+	  /*
 	  oled_clear();
 	  oled_draw_raw(joy_raw.x, joy_raw.y);
 	  oled_draw_axis(axis_value_x.axis_val, axis_value_y.axis_val);
 	  oled_draw_event(evt);
 	  oled_draw_color_menu(&ui_color);
 	  ssd1306_UpdateScreen();
+	  */
+
 	  }
 
     /* USER CODE END WHILE */
@@ -259,7 +260,21 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	static uint32_t last_time = 0;
 
+	if (HAL_GetTick() - last_time > 200)
+	{
+	    // prawdziwe naciśnięcie
+
+	if (GPIO_Pin == GPIO_PIN_9)
+			{
+			current_page(&current_menu_page);
+			}
+    last_time = HAL_GetTick();
+	}
+}
 /* USER CODE END 4 */
 
 /**

@@ -1,4 +1,6 @@
-../Core/Src/ui.c:12:6:ui_process_joystick	12
-../Core/Src/ui.c:59:6:ui_actual_color_state	15
-../Core/Src/ui.c:84:6:ui_handle_navigation	4
-../Core/Src/ui.c:108:6:ui_handle_value	15
+../Core/Src/ui.c:20:6:ui_rgb_process_joystick	12
+../Core/Src/ui.c:66:6:ui_rgb_actual_color_state	15
+../Core/Src/ui.c:91:6:ui_rgb_handle_navigation	4
+../Core/Src/ui.c:115:6:ui_rgb_handle_value	15
+../Core/Src/ui.c:137:6:current_page	2
+../Core/Src/ui.c:150:6:chose_screen	5

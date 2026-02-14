@@ -4,3 +4,5 @@
 ../Core/Src/oled.c:29:6:oled_draw_axis	1
 ../Core/Src/oled.c:40:6:oled_draw_event	1
 ../Core/Src/oled.c:54:6:oled_draw_color_menu	5
+../Core/Src/oled.c:105:6:oled_draw_welcome_menu	1
+../Core/Src/oled.c:111:6:oled_draw_snake_menu	1

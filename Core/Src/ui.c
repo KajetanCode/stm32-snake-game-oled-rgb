@@ -7,9 +7,17 @@
 #include <stdint.h>
 #include <ui.h>
 #include <stdbool.h>
+#include <oled.h>
+#include <main.h>
 
 
-void ui_process_joystick(
+extern joystick_axis_value axis_value_x;
+extern joystick_axis_value axis_value_y;
+//extern joy_event evt;
+extern joystick_raw_t joy_raw;
+extern ui_color_state_t ui_color;
+
+void ui_rgb_process_joystick(
     ui_color_state_t *ui,
     joy_event evt,
     uint32_t now)
@@ -41,22 +49,21 @@ void ui_process_joystick(
         last_evt = evt;
         last_repeat = now;
 
-        ui_handle_navigation(ui, evt, now);
-        ui_handle_value(ui, evt);
+        ui_rgb_handle_navigation(ui, evt, now);
+        ui_rgb_handle_value(ui, evt);
         return;
     }
 
     /* --- utrzymanie kierunku --- */
-    if (horiz || (vert && (now - last_repeat) >= 300))
-    {
-        last_repeat = now;
-        ui_handle_navigation(ui, evt, now);
-        ui_handle_value(ui, evt);
-    }
+	if (horiz || (vert && (now - last_repeat) >= 300)) {
+		last_repeat = now;
+		ui_rgb_handle_navigation(ui, evt, now);
+		ui_rgb_handle_value(ui, evt);
+	}
 }
 
 
-void ui_actual_color_state(
+void ui_rgb_actual_color_state(
     ui_color_state_t *ui,
     joy_event evt)
 {
@@ -81,7 +88,7 @@ void ui_actual_color_state(
 
 
 /* UP / DOWN – zmiana zaznaczenia */
-void ui_handle_navigation(
+void ui_rgb_handle_navigation(
     ui_color_state_t *ui,
     joy_event evt,
     uint32_t now)
@@ -105,7 +112,7 @@ void ui_handle_navigation(
 }
 
 /* LEFT / RIGHT – zmiana wartości procentowej */
-void ui_handle_value(ui_color_state_t *ui, joy_event evt)
+void ui_rgb_handle_value(ui_color_state_t *ui, joy_event evt)
 {
     switch (evt)
     {
@@ -127,10 +134,49 @@ void ui_handle_value(ui_color_state_t *ui, joy_event evt)
 }
 
 
+void current_page(ui_menu_page *page)
+{
+ (*page)++;
+
+ if (*page == UI_MAX_PAGE)
+ {
+	 *page = UI_WELCOME;
+ }
+
+}
 
 
 
+void chose_screen(ui_menu_page screen, joy_event evt)
+{
+	switch (screen)
+	{
 
+	case UI_WELCOME:
+		oled_clear();
+		oled_draw_welcome_menu();
+		ssd1306_UpdateScreen();
+	break;
+
+	case UI_RGB:
+		  oled_clear();
+		  oled_draw_raw(joy_raw.x, joy_raw.y);
+		  oled_draw_axis(axis_value_x.axis_val, axis_value_y.axis_val);
+		  oled_draw_event(evt);
+		  oled_draw_color_menu(&ui_color);
+		  ssd1306_UpdateScreen();
+	break;
+
+	case UI_SNAKE:
+		oled_clear();
+		oled_draw_snake_menu();
+		ssd1306_UpdateScreen();
+	break;
+
+    default:
+        break;
+	}
+}
 
 
 

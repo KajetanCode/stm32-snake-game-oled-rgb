@@ -21,6 +21,15 @@ typedef enum
     UI_STATE_MAX
 } ui_state_t;
 
+typedef enum
+{
+	UI_WELCOME = 0,
+	UI_RGB,
+	UI_SNAKE,
+	UI_MAX_PAGE
+}ui_menu_page;
+
+
 typedef struct
 {
     ui_state_t selected;   // UI_RED / UI_GREEN / UI_BLUE

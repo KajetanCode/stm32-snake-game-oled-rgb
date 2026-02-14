@@ -102,5 +102,14 @@ void oled_draw_color_menu(const ui_color_state_t *ui)
     }
 }
 
+void oled_draw_welcome_menu(void)
+{
+    ssd1306_SetCursor(0, 0);
+    ssd1306_WriteString("WELCOME", Font_6x8, White);
+}
 
-
+void oled_draw_snake_menu(void)
+{
+    ssd1306_SetCursor(0, 0);
+    ssd1306_WriteString("SNAKE", Font_6x8, White);
+}
