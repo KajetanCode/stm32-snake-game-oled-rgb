@@ -180,7 +180,7 @@ int main(void)
 
 	  now = HAL_GetTick();
 
-	  ui_rgb_process_joystick(&ui_color, evt, now,current_menu_page);
+	  ui_rgb_process_joystick(&ui_color, evt, now, current_menu_page);
 
 	  rgb_apply_ui_color(&ui_color,current_menu_page);
 
