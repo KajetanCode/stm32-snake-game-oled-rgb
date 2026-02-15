@@ -24,6 +24,7 @@
 #include "usart.h"
 #include "gpio.h"
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdbool.h>
@@ -33,6 +34,7 @@
 #include "dioda_RGB.h"
 #include "oled.h"
 #include "ui.h"
+#include "snake.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,6 +75,8 @@ ui_color_state_t ui_color =
 };
 
 
+snake_head_position_t head_position;
+uint8_t actual_snake_game_state = 0;
 
 //uint8_t dz_x, dz_y;
 //extern joystick_raw_t joy;
@@ -158,8 +162,7 @@ int main(void)
   while (1)
   {
 
-
-
+	  /*---Joy reading---*/
 	  joystick_read_raw(&joy_raw);
 
 	  joystick_apply_deadzone(
@@ -177,31 +180,33 @@ int main(void)
 	      axis_value_x.center_position,
 	      axis_value_y.axis_val,
 	      axis_value_y.center_position);
+	  /*---end---*/
 
 	  now = HAL_GetTick();
 
+	  //RGB handle
 	  ui_rgb_process_joystick(&ui_color, evt, now, current_menu_page);
-
 	  rgb_apply_ui_color(&ui_color,current_menu_page);
 
-	  static uint32_t last_oled = 0;
+	  //snake handle
+	  snake_head(&head_position, evt, current_menu_page, &actual_snake_game_state);
 
+
+	  /*---UI handle---*/
+	  static uint32_t last_oled = 0;
 	  if (HAL_GetTick() - last_oled >= 50)   // 20 FPS
 	  {
 		  last_oled = HAL_GetTick();
-
-	  chose_screen(current_menu_page, evt);
-
-	  /*
-	  oled_clear();
-	  oled_draw_raw(joy_raw.x, joy_raw.y);
-	  oled_draw_axis(axis_value_x.axis_val, axis_value_y.axis_val);
-	  oled_draw_event(evt);
-	  oled_draw_color_menu(&ui_color);
 	  ssd1306_UpdateScreen();
-	  */
+	  chose_screen(current_menu_page, evt);
+	  /*---end---*/
+
 
 	  }
+
+
+
+
 
     /* USER CODE END WHILE */
 
@@ -271,6 +276,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if (GPIO_Pin == GPIO_PIN_9)
 			{
 			current_page(&current_menu_page);
+			actual_snake_game_state = GAME_WAIT_START;
 			}
     last_time = HAL_GetTick();
 	}

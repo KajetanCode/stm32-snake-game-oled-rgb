@@ -162,7 +162,7 @@ void chose_screen(ui_menu_page screen, joy_event evt)
 	case UI_WELCOME:
 		oled_clear();
 		oled_draw_welcome_menu();
-		ssd1306_UpdateScreen();
+		//ssd1306_UpdateScreen();
 	break;
 
 	case UI_RGB:
@@ -171,13 +171,13 @@ void chose_screen(ui_menu_page screen, joy_event evt)
 		  oled_draw_axis(axis_value_x.axis_val, axis_value_y.axis_val);
 		  oled_draw_event(evt);
 		  oled_draw_color_menu(&ui_color);
-		  ssd1306_UpdateScreen();
+		 // ssd1306_UpdateScreen();
 	break;
 
 	case UI_SNAKE:
 		oled_clear();
 		oled_draw_snake_menu();
-		ssd1306_UpdateScreen();
+		//ssd1306_UpdateScreen();
 	break;
 
     default:

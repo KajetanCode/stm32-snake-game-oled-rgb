@@ -2,7 +2,7 @@
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
 #include <stdio.h>
-
+#include "snake.h"
 
 SSD1306_VERTEX snake_border[5] =
 					  {
@@ -125,15 +125,30 @@ void oled_draw_welcome_menu(void)
 void oled_draw_snake_menu(void)
 {
 	ssd1306_Polyline(snake_border, 5, White);
-
-
-
     ssd1306_SetCursor(8, 8);
-    ssd1306_WriteString("SNAKE", Font_6x8, White);
+   // ssd1306_WriteString("SNAKE", Font_6x8, White);
+
+
+
 }
 
 
+void oled_draw_snake_head(snake_head_position_t head)
+{
 
+    int start_x = head.x - 2;
+    int start_y = head.y - 2;
+
+    for (int y = 0; y < 5; y++)
+    {
+        for (int x = 0; x < 5; x++)
+        {
+            ssd1306_DrawPixel(start_x + x, start_y + y, White);
+        }
+    }
+
+   // ssd1306_UpdateScreen();
+}
 
 
 
