@@ -20,7 +20,11 @@ extern ui_color_state_t ui_color;
 void ui_rgb_process_joystick(
     ui_color_state_t *ui,
     joy_event evt,
-    uint32_t now)
+    uint32_t now,
+	ui_menu_page page)
+
+{
+	if (page == UI_RGB)
 {
     static joy_event last_evt = JOY_EVT_NONE;
     static uint32_t last_repeat = 0;
@@ -61,7 +65,10 @@ void ui_rgb_process_joystick(
 		ui_rgb_handle_value(ui, evt);
 	}
 }
+	else
+		return;
 
+}
 
 void ui_rgb_actual_color_state(
     ui_color_state_t *ui,

@@ -1,6 +1,6 @@
-../Core/Src/ui.c:20:6:ui_rgb_process_joystick	12
-../Core/Src/ui.c:66:6:ui_rgb_actual_color_state	15
-../Core/Src/ui.c:91:6:ui_rgb_handle_navigation	4
-../Core/Src/ui.c:115:6:ui_rgb_handle_value	15
-../Core/Src/ui.c:137:6:current_page	2
-../Core/Src/ui.c:150:6:chose_screen	5
+../Core/Src/ui.c:20:6:ui_rgb_process_joystick	13
+../Core/Src/ui.c:73:6:ui_rgb_actual_color_state	15
+../Core/Src/ui.c:98:6:ui_rgb_handle_navigation	4
+../Core/Src/ui.c:122:6:ui_rgb_handle_value	15
+../Core/Src/ui.c:144:6:current_page	2
+../Core/Src/ui.c:157:6:chose_screen	5
