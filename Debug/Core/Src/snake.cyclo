@@ -1,1 +1,4 @@
-../Core/Src/snake.c:18:6:snake_head	16
+../Core/Src/snake.c:23:6:snake_game_state	7
+../Core/Src/snake.c:69:6:snake_game_head	10
+../Core/Src/snake.c:135:6:snake_game_tail	1
+../Core/Src/snake.c:140:6:snake_game_snacks	2

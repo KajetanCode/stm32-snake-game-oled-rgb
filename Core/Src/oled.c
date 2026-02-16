@@ -152,7 +152,16 @@ void oled_draw_snake_head(snake_head_position_t head)
 
 
 
-
+void oled_draw_snake_snack(snake_snack_t snack)
+{
+    for (int y = 0; y < 3; y++)
+    {
+        for (int x = 0; x < 3; x++)
+        {
+            ssd1306_DrawPixel(snack.x + x, snack.y + y, White);
+        }
+    }
+}
 
 
 

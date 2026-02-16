@@ -189,7 +189,7 @@ int main(void)
 	  rgb_apply_ui_color(&ui_color,current_menu_page);
 
 	  //snake handle
-	  snake_head(&head_position, evt, current_menu_page, &actual_snake_game_state);
+	  snake_game_state(&head_position, evt, current_menu_page, &actual_snake_game_state);
 
 
 	  /*---UI handle---*/
