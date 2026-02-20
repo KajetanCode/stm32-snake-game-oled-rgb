@@ -22,7 +22,7 @@ typedef struct
 	uint8_t x;
 	uint8_t y;
 }snake_tail_position_t;
-
+extern snake_tail_position_t snake_tail[30];
 
 typedef struct
 {
@@ -30,7 +30,7 @@ typedef struct
 	uint8_t y;
 }snake_snack_t;
 
-extern snake_tail_position_t snake_tail[10];
+
 
 typedef enum
 {
@@ -42,3 +42,4 @@ typedef enum
 
 
 #endif /* INC_SNAKE_H_ */
+

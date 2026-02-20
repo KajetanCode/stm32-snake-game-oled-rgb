@@ -20,10 +20,10 @@
 #include "main.h"
 #include "adc.h"
 #include "i2c.h"
+#include "rng.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -97,6 +97,7 @@ uint8_t actual_snake_game_state = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -129,6 +130,9 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
+  /* Configure the peripherals common clocks */
+  PeriphCommonClock_Config();
+
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
@@ -140,6 +144,7 @@ int main(void)
   MX_TIM16_Init();
   MX_ADC1_Init();
   MX_I2C1_Init();
+  MX_RNG_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
@@ -155,6 +160,7 @@ int main(void)
   ssd1306_WriteString("Hello STM32", Font_6x8, White);
   ssd1306_UpdateScreen();
 
+  MX_RNG_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -196,12 +202,12 @@ int main(void)
 	  static uint32_t last_oled = 0;
 	  if (HAL_GetTick() - last_oled >= 50)   // 20 FPS
 	  {
-		  last_oled = HAL_GetTick();
-	  ssd1306_UpdateScreen();
-	  chose_screen(current_menu_page, evt);
-	  /*---end---*/
+	      last_oled = HAL_GetTick();
 
-
+	      oled_clear();
+	      chose_screen(current_menu_page, evt);
+	      snake_game_state(&head_position, evt, current_menu_page, &actual_snake_game_state);
+	      ssd1306_UpdateScreen();
 	  }
 
 
@@ -259,6 +265,32 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief Peripherals Common Clock Configuration
+  * @retval None
+  */
+void PeriphCommonClock_Config(void)
+{
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+
+  /** Initializes the peripherals clock
+  */
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RNG|RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
+  PeriphClkInit.RngClockSelection = RCC_RNGCLKSOURCE_PLLSAI1;
+  PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_HSI;
+  PeriphClkInit.PLLSAI1.PLLSAI1M = 1;
+  PeriphClkInit.PLLSAI1.PLLSAI1N = 8;
+  PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV7;
+  PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV4;
+  PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV2;
+  PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_48M2CLK|RCC_PLLSAI1_ADC1CLK;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }

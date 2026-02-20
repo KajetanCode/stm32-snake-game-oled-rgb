@@ -6,5 +6,9 @@
 ../Core/Src/oled.c:68:6:oled_draw_color_menu	5
 ../Core/Src/oled.c:119:6:oled_draw_welcome_menu	1
 ../Core/Src/oled.c:125:6:oled_draw_snake_menu	1
-../Core/Src/oled.c:136:6:oled_draw_snake_head	3
-../Core/Src/oled.c:155:6:oled_draw_snake_snack	3
+../Core/Src/oled.c:133:6:oled_draw_snake_lose	1
+../Core/Src/oled.c:142:6:oled_draw_snake_win	1
+../Core/Src/oled.c:151:6:oled_draw_snake_wait_start	1
+../Core/Src/oled.c:161:6:oled_draw_snake_head	3
+../Core/Src/oled.c:180:6:oled_draw_snake_snack	3
+../Core/Src/oled.c:194:6:oled_draw_snake_tail	4

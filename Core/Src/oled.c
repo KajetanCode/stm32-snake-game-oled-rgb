@@ -128,8 +128,33 @@ void oled_draw_snake_menu(void)
     ssd1306_SetCursor(8, 8);
    // ssd1306_WriteString("SNAKE", Font_6x8, White);
 
+}
 
+void oled_draw_snake_lose(void)
+{
+	ssd1306_SetCursor(8, 8);
+	ssd1306_WriteString("GAME OVER", Font_6x8, White);
 
+   // ssd1306_WriteString("SNAKE", Font_6x8, White);
+
+}
+
+void oled_draw_snake_win(void)
+{
+	ssd1306_SetCursor(8, 8);
+	ssd1306_WriteString("YOU HAVE WON", Font_6x8, White);
+
+   // ssd1306_WriteString("SNAKE", Font_6x8, White);
+
+}
+
+void oled_draw_snake_wait_start(void)
+{
+	ssd1306_SetCursor(5, 8);
+	ssd1306_WriteString("Push right side", Font_6x8, White);
+
+	ssd1306_SetCursor(8, 18);
+	ssd1306_WriteString("to start a game", Font_6x8, White);
 }
 
 
@@ -166,7 +191,22 @@ void oled_draw_snake_snack(snake_snack_t snack)
 
 
 
+void oled_draw_snake_tail(snake_tail_position_t *tail, uint8_t size)
+{
+    for (uint8_t i = 0; i < size; i++)
+    {
+        int start_x = tail[i].x - 2;
+        int start_y = tail[i].y - 2;
 
+        for (int y = 0; y < 5; y++)
+        {
+            for (int x = 0; x < 5; x++)
+            {
+                ssd1306_DrawPixel(start_x + x, start_y + y, White);
+            }
+        }
+    }
+}
 
 
 

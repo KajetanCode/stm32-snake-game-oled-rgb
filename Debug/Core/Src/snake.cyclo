@@ -1,4 +1,6 @@
-../Core/Src/snake.c:23:6:snake_game_state	7
-../Core/Src/snake.c:69:6:snake_game_head	10
-../Core/Src/snake.c:135:6:snake_game_tail	1
-../Core/Src/snake.c:140:6:snake_game_snacks	2
+../Core/Src/snake.c:26:10:Random_Get	2
+../Core/Src/snake.c:41:6:snake_game_state	7
+../Core/Src/snake.c:98:6:snake_game_head	11
+../Core/Src/snake.c:165:6:snake_game_snacks	2
+../Core/Src/snake.c:187:6:snake_game_tail	21
+../Core/Src/snake.c:285:6:snake_game_eat	6
