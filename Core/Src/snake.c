@@ -82,7 +82,7 @@ void snake_game_state (snake_head_position_t *head_position, joy_event evt, ui_m
 		case GAME_LOSE:
 			head_position -> x = 10;
 			head_position -> y = 10;
-
+			snake_size = 0;
 			oled_draw_snake_lose();
 
 			break;
@@ -170,8 +170,8 @@ void snake_game_snacks(snake_snack_t *snack)
 	    uint32_t r;
 	    HAL_RNG_GenerateRandomNumber(&hrng, &r);
 
-    snack->x = r % (127 - (3 - 1)); // oled border - snack size - 1
-    snack->y = r % (63 - (3 - 1)); // oled border - snack size - 1
+    snack->x = r % (127 - (5 - 1)); // oled border - snack size - 1
+    snack->y = r % (63 - (5 - 1)); // oled border - snack size - 1
 
     spawn_snack=0;
 
@@ -184,101 +184,41 @@ void snake_game_snacks(snake_snack_t *snack)
 
 
 
-void snake_game_tail(snake_head_position_t *head_position,         // kolejny krok do uzaleznic punkty ogona od iventu
+void snake_game_tail(snake_head_position_t *head_position,
                      snake_tail_position_t *snake_body,
                      joy_event last_evt)
 {
-    if (snake_grow && snake_size == 0)
+    static uint8_t prev_head_x = 10;
+    static uint8_t prev_head_y = 10;
+
+
+    for (int i = snake_size; i > 0; i--)
     {
-        uint8_t last_head_position_x = head_position->x;
-        uint8_t last_head_position_y = head_position->y;
-
-            snake_body[snake_size].x = last_head_position_x +3;
-            snake_body[snake_size].y = last_head_position_y +3;
-            snake_size+=1;
-
-            switch (last_evt)
-            {
-                case JOY_EVT_LEFT:
-                    for (int i = 0; i < 2; i++)
-                    {
-                        snake_body[snake_size + i].x = snake_body[snake_size].x + 3;
-                    }
-                    snake_size += 2;
-                    break;
-
-                case JOY_EVT_RIGHT:
-                    for (int i = 0; i < 2; i++)
-                    {
-                        snake_body[snake_size + i].x = snake_body[snake_size].x - 3;
-                    }
-                    snake_size += 2;
-                    break;
-
-                case JOY_EVT_UP:
-                    for (int i = 0; i < 2; i++)
-                    {
-                        snake_body[snake_size + i].y = snake_body[snake_size].y - 3;
-                    }
-                    snake_size += 2;
-                    break;
-
-                case JOY_EVT_DOWN:
-                    for (int i = 0; i < 2; i++)
-                    {
-                        snake_body[snake_size + i].y = snake_body[snake_size].y + 3;
-                    }
-                    snake_size += 2;
-                    break;
-            }
-
-
+        snake_body[i] = snake_body[i - 1];
     }
 
-    else if (snake_grow && snake_size != 0)
+
+    if (snake_size > 0)
     {
-        switch (last_evt)
+        snake_body[0].x = prev_head_x;
+        snake_body[0].y = prev_head_y;
+    }
+
+
+    prev_head_x = head_position->x;
+    prev_head_y = head_position->y;
+
+
+    if (snake_grow)
+    {
+        if (snake_size < SNAKE_MAX_LENGTH - 1)
         {
-            case JOY_EVT_LEFT:
-                for (int i = 0; i < 2; i++)
-                {
-                	snake_body[snake_size + i].x = snake_body[snake_size].x + 3;
-                	//snake_body[snake_size + i].y = snake_body[snake_size].y + 3;
-                }
-
-                snake_size+=3;
-
-            case JOY_EVT_RIGHT:
-                for (int i = 0; i < 2; i++)
-                {
-                	snake_body[snake_size + i].x = snake_body[snake_size].x - 3;
-                	//snake_body[snake_size + i].y = snake_body[snake_size].y + 3;
-                }
-
-                snake_size+=3;
-
-            case JOY_EVT_UP:
-                for (int i = 0; i < 2; i++)
-                {
-                	//snake_body[snake_size + i].x = snake_body[snake_size].x - 3;
-                	snake_body[snake_size + i].y = snake_body[snake_size].y - 3;
-                }
-
-                snake_size+=3;
-
-            case JOY_EVT_DOWN:
-                for (int i = 0; i < 2; i++)
-                {
-                	//snake_body[snake_size + i].x = snake_body[snake_size].x - 3;
-                	snake_body[snake_size + i].y = snake_body[snake_size].y + 3;
-                }
-
-                snake_size+=3;
-
+            snake_size+=3;
         }
+        snake_grow = 0;
     }
+
     oled_draw_snake_tail(snake_body, snake_size);
-    snake_grow = 0;
 }
 
 

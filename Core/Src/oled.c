@@ -195,12 +195,12 @@ void oled_draw_snake_tail(snake_tail_position_t *tail, uint8_t size)
 {
     for (uint8_t i = 0; i < size; i++)
     {
-        int start_x = tail[i].x - 2;
-        int start_y = tail[i].y - 2;
+        int start_x = tail[i].x - 1;
+        int start_y = tail[i].y - 1;
 
-        for (int y = 0; y < 5; y++)
+        for (int y = 0; y < 3; y++)
         {
-            for (int x = 0; x < 5; x++)
+            for (int x = 0; x < 3; x++)
             {
                 ssd1306_DrawPixel(start_x + x, start_y + y, White);
             }
