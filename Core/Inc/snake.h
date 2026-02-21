@@ -30,7 +30,9 @@ typedef struct
 	uint8_t y;
 }snake_snack_t;
 
-
+uint8_t snake_check_tail_collision(snake_head_position_t *head_position,
+                                   snake_tail_position_t *snake_body,
+                                   uint8_t snake_size);
 
 typedef enum
 {

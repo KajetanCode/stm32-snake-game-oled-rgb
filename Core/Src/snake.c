@@ -40,6 +40,11 @@ uint32_t Random_Get(void)
 
 void snake_game_state (snake_head_position_t *head_position, joy_event evt, ui_menu_page page, uint8_t *game_state)
 {
+	if(snake_size == SNAKE_MAX_LENGTH)
+	{
+		*game_state=GAME_WIN;
+	}
+
 	if (page == UI_SNAKE )
 	{
 
@@ -66,6 +71,10 @@ void snake_game_state (snake_head_position_t *head_position, joy_event evt, ui_m
 			snake_game_head(head_position, evt, game_state);
 			snake_game_eat(head_position, snack);
 			snake_game_snacks(&snack);
+			if (snake_check_tail_collision(head_position, snake_body, snake_size))
+			{
+			    *game_state = GAME_LOSE;
+			}
 			snake_game_tail(head_position, snake_body, last_evt);
 			spawn_snack=0;
 
@@ -91,6 +100,7 @@ void snake_game_state (snake_head_position_t *head_position, joy_event evt, ui_m
 	}
 
 	else
+		snake_size = 0;
 		return;
 }
 
@@ -98,11 +108,22 @@ void snake_game_state (snake_head_position_t *head_position, joy_event evt, ui_m
 void snake_game_head (snake_head_position_t *head_position, joy_event evt, uint8_t *game_state, uint8_t snake_size)
 {
 
+	if (evt != JOY_EVT_NONE)
+	{
+	    uint8_t opposite =
+	        (last_evt == JOY_EVT_LEFT  && evt == JOY_EVT_RIGHT) ||
+	        (last_evt == JOY_EVT_RIGHT && evt == JOY_EVT_LEFT)  ||
+	        (last_evt == JOY_EVT_UP    && evt == JOY_EVT_DOWN)  ||
+	        (last_evt == JOY_EVT_DOWN  && evt == JOY_EVT_UP);
 
-if (evt != JOY_EVT_NONE)
-{
-    last_evt = evt;
-}
+	    if (!opposite)
+	    {
+	        last_evt = evt;
+	    }
+	}
+
+
+
 			switch (last_evt)
 			{
 			case JOY_EVT_LEFT:
@@ -248,7 +269,21 @@ void snake_game_eat (snake_head_position_t *head_position, snake_snack_t snack)
 }
 
 
+uint8_t snake_check_tail_collision(snake_head_position_t *head_position,
+                                   snake_tail_position_t *snake_body,
+                                   uint8_t snake_size)
+{
+    for (uint8_t i = 0; i < snake_size; i++)
+    {
+        if (head_position->x == snake_body[i].x &&
+            head_position->y == snake_body[i].y)
+        {
+            return 1; // kolizja
+        }
+    }
 
+    return 0; // brak kolizji
+}
 
 
 
