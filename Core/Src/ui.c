@@ -47,7 +47,7 @@ void ui_rgb_process_joystick(
 
     last_activity = now;
 
-    /* --- nowy kierunek --- */
+    /* --- new direction --- */
     if (evt != last_evt)
     {
         last_evt = evt;
@@ -58,7 +58,7 @@ void ui_rgb_process_joystick(
         return;
     }
 
-    /* --- utrzymanie kierunku --- */
+    /* --- hold direction --- */
 	if (horiz || (vert && (now - last_repeat) >= 300)) {
 		last_repeat = now;
 		ui_rgb_handle_navigation(ui, evt, now);
@@ -94,7 +94,7 @@ void ui_rgb_actual_color_state(
 }
 
 
-/* UP / DOWN – zmiana zaznaczenia */
+/* UP / DOWN  */
 void ui_rgb_handle_navigation(
     ui_color_state_t *ui,
     joy_event evt,
@@ -118,7 +118,7 @@ void ui_rgb_handle_navigation(
     }
 }
 
-/* LEFT / RIGHT – zmiana wartości procentowej */
+/* LEFT / RIGHT  */
 void ui_rgb_handle_value(ui_color_state_t *ui, joy_event evt)
 {
     switch (evt)

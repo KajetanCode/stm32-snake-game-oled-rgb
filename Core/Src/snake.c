@@ -29,7 +29,7 @@ uint32_t Random_Get(void)
 
     if (HAL_RNG_GenerateRandomNumber(&hrng, &number) != HAL_OK)
     {
-        // fallback (awaryjnie)
+        // fallback
         number = HAL_GetTick();
     }
 
@@ -81,17 +81,15 @@ void snake_game_state (snake_head_position_t *head_position, joy_event evt, ui_m
 			break;
 
 		case GAME_WIN:
-			head_position -> x = 10;
-			head_position -> y = 10;
-			snake_size = 0;
+
+			snake_game_init(head_position);
 			oled_draw_snake_win();
 
 			break;
 
 		case GAME_LOSE:
-			head_position -> x = 10;
-			head_position -> y = 10;
-			snake_size = 0;
+
+			snake_game_init(head_position);
 			oled_draw_snake_lose();
 
 			break;
@@ -191,8 +189,8 @@ void snake_game_snacks(snake_snack_t *snack)
 	    uint32_t r;
 	    HAL_RNG_GenerateRandomNumber(&hrng, &r);
 
-    snack->x = r % (127 - (5 - 1)); // oled border - snack size - 1
-    snack->y = r % (63 - (5 - 1)); // oled border - snack size - 1
+    snack->x = r % (127 - (8 + 3)); // oled border - snack size - 3
+    snack->y = r % (63 - (8 + 3)); // oled border - snack size - 3
 
     spawn_snack=0;
 
@@ -246,27 +244,29 @@ void snake_game_tail(snake_head_position_t *head_position,
 void snake_game_eat (snake_head_position_t *head_position, snake_snack_t snack)
 {
 
+	    for (int yi = 0; yi < 5; yi++)
+	    {
+	        for (int xi = 0; xi < 5; xi++)
+	        {
+	            for (int qy = 0; qy < 3; qy++)
+	            {
+	                for (int qx = 0; qx < 3; qx++)
+	                {
+	                    if (
+	                        head_position->x + xi == snack.x + qx &&
+	                        head_position->y + yi == snack.y + qy
+	                       )
+	                    {
+	                        spawn_snack = 1;
+	                        snake_grow = 1;
+	                        return;
+	                    }
+	                }
+	            }
+	        }
+	    }
+	}
 
-		for (int yi = 0; yi < 5; yi++)
-		{
-			for (int xi = 0; xi < 5; xi++)
-			{
-				for (int qi = 0; qi < 3; qi++)
-				{
-					if(
-						head_position -> x + xi == snack.x + qi &&
-						head_position -> y + yi == snack.y + qi
-						)
-						{
-						spawn_snack=1;
-						snake_grow = 1;
-						}
-				}
-			}
-
-
-		}
-}
 
 
 uint8_t snake_check_tail_collision(snake_head_position_t *head_position,
@@ -278,16 +278,26 @@ uint8_t snake_check_tail_collision(snake_head_position_t *head_position,
         if (head_position->x == snake_body[i].x &&
             head_position->y == snake_body[i].y)
         {
-            return 1; // kolizja
+            return 1; // collision
         }
     }
 
-    return 0; // brak kolizji
+    return 0; // no collision
 }
 
 
 
+void snake_game_init(snake_head_position_t *head_position)
+{
+    snake_size = 0;
+    snake_grow = 0;
+    spawn_snack = 1;
 
+    head_position -> x = 10;
+    head_position -> y = 10;
+
+    last_evt = JOY_EVT_RIGHT;
+}
 
 
 

@@ -93,7 +93,7 @@ void oled_draw_color_menu(const ui_color_state_t *ui)
     snprintf(buf, sizeof(buf), "%3u%%", ui->b);
     ssd1306_WriteString(buf, Font_6x8, White);
 
-    /* --- Aktywny kolor --- */
+    /* --- Active color --- */
     switch (ui->selected)
     {
         case UI_RED:
